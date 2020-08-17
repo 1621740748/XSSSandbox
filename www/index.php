@@ -21,6 +21,8 @@
 		<li><a href="reflected/xss-reflected-2.php">Challenge 2</a></li>
 		<li><a href="reflected/xss-reflected-3.php">Challenge 3</a></li>
 		<li><a href="reflected/xss-reflected-4.php">Challenge 4</a></li>
+		<li><a href="reflected/xss-reflected-5.html">Challenge 5</a></li>
+		<li><a href="reflected/xss-reflected-6.html">Challenge 6</a></li>
 	</ul>
 
 

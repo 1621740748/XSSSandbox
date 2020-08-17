@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>XSS Challenge 5</title>
+	<style type="text/css">
+		body{
+			font-family: monospace;
+		}
+	</style>
+</head>
+
+<body>
+
+<h1>Leetspeak Generator</h1>
+<textarea cols="24" rows="3" id="text"></textarea>
+<hr>
+<p id="converted"></p>
+
+
+<script type="text/javascript">
+	document.getElementById('text').onkeyup = function(e) {
+		var value = this.value.toLowerCase().split('');
+		var leet = {'o': '0', '0': 'o', 'l': '7', '7': 'l', 'e': '3', '3': 'e', 'a': '@', '@': 'a', 'i': '!', '!': 'i', 'b': '6', '6': 'b'}
+
+		var keys = Object.keys(leet);
+
+		var newstr = ""
+
+		for (var i=0; i < value.length; i++) {
+			var char = value[i];
+			if (keys.indexOf(char) > -1) {
+				value[i] = leet[char]
+			}
+		}
+
+		document.getElementById('converted').innerHTML = value.join('');
+
+	}
+</script>
+
+</body>
+
+</html>

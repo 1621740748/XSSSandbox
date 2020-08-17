@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>XSS Challenge 6</title>
+	<style type="text/css">
+		body{
+			font-family: monospace;
+		}
+		h2 {
+			padding: 0;
+			margin: 0;
+		}
+	</style>
+
+	<script type="text/javascript">
+		
+		function loadPageFromHash() {
+			var hash = window.location.hash.substr(1);
+			var path = window.location.pathname.split('/')
+			path.pop()
+			path = path.join('/')+'/' + hash
+
+			document.getElementById('page').src = path
+		}
+
+		window.onhashchange = loadPageFromHash
+
+	</script>
+
+</head>
+
+<body>
+
+	<h2>XSS Challenge 6</h2>
+	<!-- Think time machines -->
+	<center>
+		<a href="#pages/page1.html">Page 1</a> + <a href="#pages/page2.html">Page 2</a>
+		<hr>
+		<br/>
+		<iframe id="page" width="50%" height="50%"></iframe>
+	</center>
+	
+	<script type="text/javascript">
+		
+		if (window.location.hash == "") {
+			window.location.hash = "#pages/page1.html"
+		}
+		loadPageFromHash()
+
+	</script>
+
+</body>
+
+</html>
