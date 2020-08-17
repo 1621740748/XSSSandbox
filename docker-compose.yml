@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+    dev-nginx:
+        image: nginx:latest
+        container_name: dev-www-nginx
+        restart: always
+        ports:
+            - "8000:80"
+        volumes:
+            - ./www:/code
+            - ./confs/site.conf:/etc/nginx/conf.d/default.conf
+        networks:
+            - dev-www-network
+        links:
+            - dev-php
+    dev-php:
+        image: php:fpm
+        container_name: dev-www-php
+        restart: always
+        volumes:
+            - ./www:/code
+        networks:
+            - dev-www-network
+
+networks:
+    dev-www-network:
+        driver: bridge
