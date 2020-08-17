@@ -194,4 +194,64 @@ class TikiFilter_PreventXss
 		}
 		return $found;
 	}
+	
+	function RemoveXSSregexp(&$ra, &$val, $prefix = '', $suffix = '', $allow_spaces = false)
+	{
+		$val_before = $val;
+		$found = true;
+		$patterns = [];
+		$replacements = [];
+		$pattern_sep = '('
+			. '&#[xX]0{0,8}[9ab];?'
+			. '|&#0{0,8}(9|10|13);?'
+			. '|(?ms)(\/\*.*?\*\/|\<\!\-\-.*?\-\-\>)'
+			. '|(\<\!\[CDATA\[|\]\]\>)'
+			. '|\\\\?'
+			. ( $allow_spaces ? '|\s' : '' )
+		. ')*';
+		$pattern_start = '/';
+		if ($prefix != '') {
+			$pattern_start .= '(' . $prefix . '\s*' . $pattern_sep . ')';
+		}
+		$pattern_end = '/i';
+		if ($suffix != '') {
+			if ($suffix == '=' || $suffix == ':') {
+				$replacement_end = $suffix;
+				$pattern_end = '(' . $pattern_sep . '\s*' . $suffix . ')' . $pattern_end;
+			} else {
+				$replacement_end = '';
+				$pattern_end = $suffix . $pattern_end;
+			}
+		} else {
+			$replacement_end = '';
+		}
+		for ($i = 0, $isizeof_ra = count($ra); $i < $isizeof_ra; $i++) {
+			$pattern = $pattern_start;
+			for ($j = 0, $jstrlen_rai = strlen($ra[$i]); $j < $jstrlen_rai; $j++) {
+				if ($j > 0) {
+					$pattern .= $pattern_sep;
+				}
+				$pattern .= $ra[$i][$j];
+			}
+			$pattern .= $pattern_end;
+			$replacement = ( $prefix != '' ) ? '\\1' : '';
+			// add in <> to nerf the tag
+			$replacement .= substr($ra[$i], 0, 2) . '<x>' . substr($ra[$i], 2);
+			$patterns[] = $pattern;
+			$replacements[] = $replacement . $replacement_end;
+		}
+		// filter out the hex tags
+		$val = preg_replace($patterns, $replacements, $val);
+		if ($val === null) {
+			Feedback::error(tr(
+				'Filter error: "%0"',
+				array_flip(get_defined_constants(true)['pcre'])[preg_last_error()]
+			));
+		}
+		if ($val_before == $val) {
+			// no replacements were made, so exit the loop
+			$found = false;
+		}
+		return $found;
+	}
 }
