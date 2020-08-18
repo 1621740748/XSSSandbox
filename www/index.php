@@ -33,6 +33,9 @@
 				<th>
 					<h3>Stored XSS</h3>
 				</th>
+				<th>
+					<h3>CSP</h3>
+				</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -52,7 +55,11 @@
 					<ul>
 						<li><a href="stored/xss-stored-1.html">Challenge 1</a></li>
 					</ul>
-
+				</td>
+				<td>
+					<ul>
+						<li><a href="CSP/xss-csp-1.php">Challenge 1</a></li>
+					</ul>
 				</td>
 			</tr>
 		</tbody>
