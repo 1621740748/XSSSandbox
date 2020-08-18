@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>XSS Stored 1</title>
+		<style type="text/css">
+			body{
+				font-family: monospace;
+			}
+			#success {
+				color: green;
+				font-weight: bold;
+				display: none;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>XSS Stored Challenge 1</h1>
+
+		<p id="text">Hello, Please set your name</p>
+
+		<input type="text" id="name" autocomplete="off" placeholder="Name"> <input type="submit" id="clear" value="Clear Name" onclick="clearName()">
+		<p id="success">Name Updated</p>
+
+		<script type="text/javascript">
+			
+			function updateName() {
+				var name = window.localStorage.getItem('name')
+				if (name == null) {
+					name = "Please set your name"
+				}
+				document.getElementById('text').style.display = "none";
+				document.getElementById('text').innerHTML = "Hello, " + name;
+				setTimeout(function(){
+					document.getElementById('text').style.display = "inherit"
+				}, 250)
+			}
+
+			function clearName() {
+				var c = confirm('Are you sure?')
+				document.getElementById('name').disabled = true
+				if (c == true) {
+					window.localStorage.removeItem('name')
+					updateName()
+					setTimeout(function(){
+						document.getElementById('name').disabled = false
+					}, 250);
+				}
+			}
+
+			document.getElementById('name').onchange = function() {
+				this.disabled = true
+				document.getElementById('clear').disabled = true
+				var val = this.value
+				window.localStorage.setItem('name', val);
+				document.getElementById('success').style.display = "inherit";
+				
+				updateName()
+
+				setTimeout(function(){
+					document.getElementById('success').style.display = "none";
+					document.getElementById('name').value = ""
+					document.getElementById('name').disabled = false
+					document.getElementById('clear').disabled = false
+				}, 750);
+			}
+
+			if (Object.keys(window.localStorage).indexOf('name') != -1) {
+				updateName()
+			}
+
+		</script>
+
+	</body>
+</html>

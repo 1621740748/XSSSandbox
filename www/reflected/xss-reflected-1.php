@@ -10,10 +10,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>XSS Reflected 1</title>
+	<title>XSS Reflected Challenge 1</title>
+	<style type="text/css">
+		body{
+			font-family: monospace;
+		}
+	</style>
 </head>
 <body>
-	<h1>XSS Reflected 1</h1>
+	<h1>XSS Reflected Challenge 1</h1>
 	<?php if (isset($_REQUEST['name'])) { echo "<b>Hello ".$_REQUEST['name']."</b><br>"; } ?>
 	<form method="GET">
 		<input type="text" name="name" autocomplete="false" placeholder="Enter your name">
